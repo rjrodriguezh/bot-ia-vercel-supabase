@@ -31,7 +31,7 @@ export default function Home() {
   }
 
   function onKeyDown(e) {
-    // Enviar con Ctrl+Enter
+    // Enviar con Ctrl+Enter (o Cmd+Enter en Mac)
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       send();
@@ -68,4 +68,29 @@ export default function Home() {
       </div>
 
       {err && (
-        <div style=
+        <div style={{ marginTop: 12, color: "#b00020" }}>
+          ⚠️ {err}
+        </div>
+      )}
+
+      {a && (
+        <pre
+          style={{
+            whiteSpace: "pre-wrap",
+            background: "#f6f6f6",
+            padding: 12,
+            marginTop: 16,
+            borderRadius: 6,
+            border: "1px solid #eee"
+          }}
+        >
+          {a}
+        </pre>
+      )}
+
+      <footer style={{ marginTop: 28, fontSize: 12, color: "#777" }}>
+        Tip: también puedes probar <code>/api/health</code>.
+      </footer>
+    </main>
+  );
+}
