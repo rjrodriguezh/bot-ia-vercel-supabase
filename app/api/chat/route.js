@@ -2,7 +2,6 @@ export async function POST(req) {
   const { message } = await req.json();
 
   try {
-    console.log("API KEY presente:", !!process.env.OPENAI_API_KEY);
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -19,9 +18,15 @@ export async function POST(req) {
     });
 
     const data = await r.json();
-    const answer = data.choices?.[0]?.message?.content ?? "No tuve respuesta.";
 
+    if (!r.ok) {
+      console.error("Error OpenAI:", data);
+      return Response.json({ ok: false, error: data.error?.message || "Error API" }, { status: 500 });
+    }
+
+    const answer = data.choices?.[0]?.message?.content ?? "No tuve respuesta.";
     return Response.json({ ok: true, answer });
+
   } catch (err) {
     console.error("Error en /api/chat:", err);
     return Response.json({ ok: false, error: "Error al conectar con OpenAI" }, { status: 500 });
