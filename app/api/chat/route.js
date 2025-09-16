@@ -2,6 +2,7 @@ export async function POST(req) {
   const { message } = await req.json();
 
   try {
+    console.log("API KEY presente:", !!process.env.OPENAI_API_KEY);
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
