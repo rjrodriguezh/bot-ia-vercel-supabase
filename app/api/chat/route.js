@@ -23,7 +23,8 @@ export async function POST(req) {
         "X-Title": "bot-ia-vercel-supabase"
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.1-8b-instruct:free",
+        //model: "meta-llama/llama-3.1-8b-instruct:free",
+        model: "google/gemma-7b-it:free",
         messages: [
           { role: "system", content: "Eres un asistente amable y conciso." },
           { role: "user", content: message || "" }
