@@ -9,7 +9,6 @@ export async function POST(req) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        //model: "gpt-4o-mini", // rápido y económico
         model: "gpt-4o",
         messages: [
           { role: "system", content: "Eres un asistente amable y conciso." },
