@@ -4,11 +4,10 @@ export async function POST(req) {
   const { message } = await req.json();
 
   if (!process.env.OPENROUTER_API_KEY) {
-    return Response.json(
-      { ok: false, error: "Falta OPENROUTER_API_KEY en el servidor (project env)" },
-      { status: 500 }
-    );
+    return Response.json({ ok:false, error:"Falta OPENROUTER_API_KEY" }, { status:500 });
   }
+
+  const model = "google/gemma-7b-it:free"; // <--- cambia el modelo aquí
 
   try {
     const r = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -20,7 +19,7 @@ export async function POST(req) {
         "X-Title": "bot-ia-vercel-supabase"
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.1-8b-instruct:free",
+        model,
         messages: [
           { role: "system", content: "Eres un asistente amable y conciso." },
           { role: "user", content: message || "" }
@@ -29,20 +28,15 @@ export async function POST(req) {
     });
 
     const data = await r.json();
-
     if (!r.ok) {
       console.error("OpenRouter error:", data);
-      return Response.json(
-        { ok: false, error: data?.error?.message || "Error API OpenRouter" },
-        { status: r.status || 500 }
-      );
+      return Response.json({ ok:false, error:data?.error?.message || "Error API OpenRouter" }, { status:r.status||500 });
     }
 
     const answer = data.choices?.[0]?.message?.content ?? "Sin respuesta del modelo.";
-    return Response.json({ ok: true, answer });
-
+    return Response.json({ ok:true, answer });
   } catch (e) {
     console.error("Conexión OpenRouter:", e);
-    return Response.json({ ok: false, error: "No se pudo conectar con OpenRouter" }, { status: 500 });
+    return Response.json({ ok:false, error:"No se pudo conectar con OpenRouter" }, { status:500 });
   }
 }
